@@ -49,8 +49,8 @@ export class JsonSchemaComponent implements OnInit {
     console.log('[c] dddd1', this.json);
 
     var margin = {top: 20, right: 120, bottom: 20, left: 120},
-      width = 1560 - margin.right - margin.left,
-      height = 900 - margin.top - margin.bottom;
+      width = 2560 - margin.right - margin.left,
+      height = 1200 - margin.top - margin.bottom;
 
     var i = 0,
       duration = 750,
@@ -64,7 +64,7 @@ export class JsonSchemaComponent implements OnInit {
 
     var diagonal = d3.svg.diagonal()
       .projection(function(d) {
-        return [d.y, d.x];
+        return [d.y , d.x ];
       });
 
     // @ts-ignore
@@ -83,7 +83,7 @@ export class JsonSchemaComponent implements OnInit {
 
     update(root);
     // @ts-ignore
-    d3.select(self.frameElement).style('height', '800px');
+    d3.select(self.frameElement).style('height', '2500px');
 
     function update(source) {
 
@@ -95,7 +95,7 @@ export class JsonSchemaComponent implements OnInit {
 
       // Normalize for fixed-depth.
       nodes.forEach(function(d) {
-        d.y = d.depth * 180;
+        d.y = d.depth * 240;
       });
 
       // Update the nodes…
@@ -116,7 +116,7 @@ export class JsonSchemaComponent implements OnInit {
         .attr('r', 1e-6)
         .style('fill', function(d: any) {
           return d._children ? 'lightsteelblue' : '#fff';
-        });
+        }).style('padding', "20px" );
 
       nodeEnter.append('text')
         .attr('x', function(d: any) {

@@ -42,7 +42,7 @@ export class JsonSchemaService {
 
 
   treeData: any = [{
-    name: MainObjectsName.Schema,
+    name: '{}',
     parent: null,
     children: []
   }];
@@ -55,18 +55,135 @@ export class JsonSchemaService {
     if (!obj) {
       return 0;
     }
-    console.log('[c] bbb', obj, typeof obj, currentField);
+    console.log('[c] bbb', obj);
     let current_Layer_keys: any = 0;
+
     if (typeof obj === 'string') {
       tree.children.push({name: currentField, children: []});
       return 0;
     }
-    if (typeof obj === 'object') {
+    if (typeof obj === 'object' && !Array.isArray(obj)) {
 
       current_Layer_keys = Object.keys(obj);
       tree.children.push({name: currentField, children: []});
-      console.log('popo', current_Layer_keys , obj.length);
+      console.log('popoVV', current_Layer_keys, current_Layer_keys.length);
+
+
+      console.log('popoVV1', current_Layer_keys);
+      let index = tree.children.findIndex(elem => elem.name === currentField);
+
       for (let i = 0; i < current_Layer_keys.length; i++) {
+        console.log('popoVV2', current_Layer_keys[i]);
+        if (!obj.length) {
+          console.log('debug_0', current_Layer_keys[i]);
+          tree.children[index].children.push({name: current_Layer_keys[i], children: []});
+          if (typeof obj[current_Layer_keys[i]] !== 'string' && Object.keys(obj[current_Layer_keys[i]]).length > 0) {
+
+
+            for (let j = 0; j < Object.keys(obj[current_Layer_keys[i]]).length; j++) {
+
+              console.log('iop', obj[current_Layer_keys[i]]);
+              let temp_j = Object.keys(obj[current_Layer_keys[i]])[j];
+
+              if (typeof obj[current_Layer_keys[i]][temp_j] === 'object') {
+                let index_j = tree.children[index].children.findIndex(elem => elem.name === current_Layer_keys[i]);
+                console.log('debug_1', obj[current_Layer_keys[i]][temp_j]);
+                this.recursivePush(obj[current_Layer_keys[i]][temp_j], tree.children[index].children[index_j], temp_j);
+              } else {
+                let index_j = tree.children[index].children.findIndex(elem => elem.name === current_Layer_keys[i]);
+                console.log('debug_2', obj[current_Layer_keys[i]], Object.keys(obj[current_Layer_keys[i]])[j]);
+                tree.children[index].children[index_j].children.push({name: Object.keys(obj[current_Layer_keys[i]])[j], children: []});
+              }
+
+              // console.log('[c] bla_o', obj[current_Layer_keys[i]][temp_j]);
+
+              //this.recursivePush();
+
+            }
+          } else {
+            console.log('[c] string1', obj[current_Layer_keys[i]]);
+          }
+
+        } else {
+          console.log('[c] string[else]', obj.length);
+          // for (let i = 0; i < obj.length; i++) {
+          //
+          //   if(true)
+          //   {
+          //     tree.children[index].children.push({name: i, children: []});
+          //     // if (typeof obj[current_Layer_keys] !== 'string' && Object.keys(obj[current_Layer_keys[i]]).length > 0) {
+          //     //   for (let j = 0; j < Object.keys(obj[current_Layer_keys[i]]).length; j++) {
+          //     //     let temp_j = Object.keys(obj[current_Layer_keys[i]])[j];
+          //     //     if (typeof obj[current_Layer_keys[i]][temp_j] === 'object') {
+          //     //       let index_j = tree.children[index].children.findIndex(elem => elem.name === current_Layer_keys[i]);
+          //     //       this.recursivePush(obj[current_Layer_keys[i]][temp_j], tree.children[index].children[index_j], temp_j);
+          //     //     } else {
+          //     //       let index_j = tree.children[index].children.findIndex(elem => elem.name === current_Layer_keys[i]);
+          //     //       tree.children[index].children[index_j].children.push({name: Object.keys(obj[current_Layer_keys[i]])[j], children: []});
+          //     //     }
+          //     //
+          //     //     // console.log('[c] bla_o', obj[current_Layer_keys[i]][temp_j]);
+          //     //
+          //     //     //this.recursivePush();
+          //     //
+          //     //   }
+          //     // }
+          //   }
+          //
+          //
+          // }
+
+
+          //console.log('iop');
+        }
+      }
+    } else if (Array.isArray(obj)) {
+
+      tree.children.push({name: currentField, children: []});
+      console.log('[c] yuio', obj);
+      let index = tree.children.findIndex(elem => elem.name === currentField);
+      for (let i = 0; i < obj.length; i++) {
+
+        //tree.children[index].children.push({name: i, children: []});
+
+        if (typeof obj[i] === 'object') {
+
+          //tree.children[index].children[i].children.push({name: i, children: []});
+
+
+           console.log('iiu', obj[i]);
+          this.recursivePush(obj[i], tree.children[index] , i);
+
+        } else {
+          tree.children[index].children.push({name: obj[i], children: []});
+        }
+
+
+        //
+        // obj.forEach(elem =>{
+
+        // } );
+
+
+        // if (true ) {
+        //   for (let j = 0; j < Object.keys(obj[current_Layer_keys[i]]).length; j++) {
+        //     let temp_j = Object.keys(obj[current_Layer_keys[i]])[j];
+        //     if (typeof obj[current_Layer_keys[i]][temp_j] === 'object') {
+        //       let index_j = tree.children[index].children.findIndex(elem => elem.name === current_Layer_keys[i]);
+        //       this.recursivePush(obj[current_Layer_keys[i]][temp_j], tree.children[index].children[index_j], temp_j);
+        //     }
+        //     else {
+        //       let index_j = tree.children[index].children.findIndex(elem => elem.name === current_Layer_keys[i]);
+        //       tree.children[index].children[index_j].children.push({name: Object.keys(obj[current_Layer_keys[i]])[j], children: []});
+        //     }
+        //
+        //     // console.log('[c] bla_o', obj[current_Layer_keys[i]][temp_j]);
+        //
+        //     //this.recursivePush();
+        //
+        //   }
+        // }
+
 
       }
 
@@ -117,7 +234,6 @@ export class JsonSchemaService {
   parseSchema = (schema: any) => {
     console.log('vvf', Object.keys(schema));
     let schema_keys = Object.keys(schema);
-    console.log('[c] schema_keys', schema_keys, schema);
     for (let i = 0; i < schema_keys.length; i++) {
       this.treeData[0].children.push({name: schema_keys[i], children: []});
       let index = this.treeData[0].children.findIndex(elem => elem.name === schema_keys[i]);
@@ -126,7 +242,7 @@ export class JsonSchemaService {
       console.log('[c] schema_keys', schema[schema_keys[i]], Object.keys(schema[schema_keys[i]]));
 
 
-      if (Object.keys(schema[schema_keys[i]]).length < 4) {
+      if (Object.keys(schema[schema_keys[i]]).length > 0) {
         console.log('www', Object.keys(schema[schema_keys[i]]));
         for (let j = 0; j < Object.keys(schema[schema_keys[i]]).length; j++) {
           let temp = Object.keys(schema[schema_keys[i]])[j];
