@@ -80,53 +80,6 @@
         ]
       }
     }
-  },
-  "layout": [
-    { "widget": "message", "message": "<h3>Values only</h3>" },
-    "captain1",
-    { "widget": "message", "message": "<h3>Names &amp; Values</h3>" },
-    "captain2",
-    "captain3",
-    { "key": "captain4",
-      "titleMap": [
-        { "name": "James T. Kirk",    "value": "William Shatner" },
-        { "name": "Jean-Luc Picard",  "value": "Patrick Stewart" },
-        { "name": "Jack Harkness",    "value": "John Barrowman"  },
-        { "name": "Malcolm Reynolds", "value": "Nathan Fillion"  }
-      ]
-    },
-    "captain5",
-    { "key": "captain6",
-      "titleMap": {
-        "William Shatner": "James T. Kirk",
-        "Patrick Stewart": "Jean-Luc Picard",
-        "John Barrowman" : "Jack Harkness",
-        "Nathan Fillion" : "Malcolm Reynolds"
-      }
-    },
-    { "widget": "message", "message": "<h3>Groups, Names, &amp; Values</h3>" },
-    { "key": "captain7",
-      "titleMap": [
-        { "group": "Star Trek", "name": "James T. Kirk",    "value": "William Shatner" },
-        { "group": "Star Trek", "name": "Jean-Luc Picard",  "value": "Patrick Stewart" },
-        { "group": "Torchwood", "name": "Jack Harkness",    "value": "John Barrowman"  },
-        { "group": "Firefly",   "name": "Malcolm Reynolds", "value": "Nathan Fillion"  }
-      ]
-    },
-    { "key": "captain8",
-      "titleMap": [
-        { "group": "Star Trek",
-          "items": [ { "name": "James T. Kirk",    "value": "William Shatner" },
-            { "name": "Jean-Luc Picard",  "value": "Patrick Stewart" } ]
-        },
-        { "group": "Torchwood",
-          "items": [ { "name": "Jack Harkness",    "value": "John Barrowman"  } ]
-        },
-        { "group": "Firefly",
-          "items": [ { "name": "Malcolm Reynolds", "value": "Nathan Fillion"  } ]
-        }
-      ]
-    },
-    "captain9"
-  ]
-}
+  }
+
+ }
