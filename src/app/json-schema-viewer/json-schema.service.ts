@@ -97,13 +97,13 @@ export class JsonSchemaService {
   parseSchema = (schema: any, isSecondJson?:boolean) => {
     let schema_keys = Object.keys(schema);
     for (let i = 0; i < schema_keys.length; i++) {
-   
-      this.treeData[0].children.push({name: schema_keys[i], children: []});
-      let index = this.treeData[0].children.findIndex(elem => elem.name === schema_keys[i]);
+       
+      this.treeData[isSecondJson ? 1 : 0].children.push({name: schema_keys[i], children: []});
+      let index = this.treeData[isSecondJson ? 1 : 0].children.findIndex(elem => elem.name === schema_keys[i]);
       if (Object.keys(schema[schema_keys[i]]).length > 0) {
         for (let j = 0; j < Object.keys(schema[schema_keys[i]]).length; j++) {
           let temp = Object.keys(schema[schema_keys[i]])[j];
-          this.recursivePush(schema[schema_keys[i]][temp], this.treeData[0].children[index || 0], temp);
+          this.recursivePush(schema[schema_keys[i]][temp], this.treeData[isSecondJson ? 1 : 0].children[index || 0], temp);
         }
       }
     }

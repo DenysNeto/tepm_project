@@ -1,4 +1,4 @@
-import { Component, OnInit } from "@angular/core";
+import { Component, OnInit, ViewChild } from "@angular/core";
 // @ts-ignore
 
 import { JsonSchemaService } from "../json-schema.service";
@@ -24,12 +24,14 @@ export class JsonSchemaComponent implements OnInit {
   deltaDragging: { x: number; y: number } = { x: 0, y: 0 };
   // @ts-ignore
   tree = d3.layout.tree();
+
+  @ViewChild("btn", { static: false }) btn;
   root;
   svg;
   duration;
-  margin = { top: 200, right: 120, bottom: 20, left: 120 };
-  width = 2500 - this.margin.right - this.margin.left;
-  height = 800 - this.margin.top - this.margin.bottom;
+  margin = { top: 200, right: 10, bottom: 20, left: 0 };
+  width = window.innerWidth / 2 - this.margin.right - this.margin.left;
+  height = (window.innerHeight - this.margin.top - this.margin.bottom) * 0.9;
   currentScale: number = 1;
 
   constructor(private jsonSchemaService: JsonSchemaService) {}
@@ -70,7 +72,7 @@ export class JsonSchemaComponent implements OnInit {
   zoom =
     // @ts-ignore
     d3.behavior.zoom().on("zoom", d => {
-      console.log("casd", this.zoom.scale());
+      console.log("casd", this.btn);
       // @ts-ignore
       // this.svg.attr(
       //   "transform",
@@ -87,6 +89,10 @@ export class JsonSchemaComponent implements OnInit {
     console.log("[]ceee ", event);
   }
 
+  ngAfterViewInit() {
+    console.log("casd", this.btn);
+  }
+
   ngOnInit() {
     this.jsonSchemaService.parseSchema(this.json);
     this.duration = 750;
@@ -94,7 +100,7 @@ export class JsonSchemaComponent implements OnInit {
     // @ts-ignore
 
     this.tree.size([this.height, this.width]);
-    this.tree.nodeSize([50, 50]);
+    this.tree.nodeSize([30, 30]);
     // @ts-ignore
     diagonal = d3.svg.diagonal().projection(function(d) {
       return [d.y, d.x];
@@ -106,7 +112,10 @@ export class JsonSchemaComponent implements OnInit {
     this.svg = d3
       .select("app-json-schema")
       .append("svg")
-      .attr("width", this.width + this.margin.right + this.margin.left)
+      .style("border", "1px solid black")
+      .style("margin-right", "20px")
+      .attr("viewBox", `10 10 ${this.width} , ${this.height + 400}`)
+      .attr("width", this.width - 100 + this.margin.right + this.margin.left)
       .attr("height", this.height + this.margin.top + this.margin.bottom)
       .append("g")
       .attr(
@@ -117,11 +126,13 @@ export class JsonSchemaComponent implements OnInit {
 
     this.svg
       .append("rect")
-      .attr("x", -3000)
-      .attr("y", -3000)
-      .attr("width", this.width * 3)
-      .attr("height", this.height * 15)
+      .attr("y", -20000)
+      .attr("x", -10000)
+      .attr("width", this.width * 300)
+      .attr("height", this.height * 300)
+      .attr("overflow", "scroll")
       .attr("fill", "transparent")
+      .attr("stroke", "black")
       .call(
         // @ts-ignore
         d3.behavior
@@ -344,7 +355,7 @@ export class JsonSchemaComponent implements OnInit {
 
     this.update(this.root);
     // @ts-ignore
-    d3.select(self.frameElement).style("height", "2500px");
+    //d3.select(self.frameElement).style("height", "2500px");
 
     // Toggle children on click.
   }
