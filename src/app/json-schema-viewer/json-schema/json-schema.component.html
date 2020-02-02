@@ -1,10 +1,6 @@
-<div>
-    
-    <div  id="jsv-tree">
-        <button (click)='handleZoomPlus()'>Zoom on</button>
-        <button (click)='handleZoomMinus()'>Zoom ouy</button>
-    </div>
+<div id='jsv-wrapper' (click)='onClickHandler($event)'>
+  <div id="jsv-tree">
+    <button id='btn-zoom-on'>Zoom on</button>
+    <button id='btn-zoom-out'>Zoom out</button>
+  </div>
 </div>
-
-
-

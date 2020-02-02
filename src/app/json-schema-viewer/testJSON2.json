@@ -1,0 +1,86 @@
+{
+    "schema": {
+      "title": "Who's your favorite captain?",
+      "description": "Demonstrates different ways to create select controls from a list of values.",
+      "type": "object",
+      "properties": {
+        "captain1": {
+          "title": "Favorite captain 1",
+          "description": "enum array in schema (JSON Schema v1+)",
+          "type": "string",
+          "enum": [ "William Shatner",
+            "Patrick Stewart",
+            "John Barrowman",
+            "Nathan Fillion" ]
+        },
+        "captain2": {
+          "title": "Favorite captain 2",
+          "description": "oneOf array with enum items in schema (JSON Schema v4+)",
+          "type": "string",
+          "oneOf":  [
+            { "title": "James T. Kirk",    "enum": [ "William Shatner" ] },
+            { "title": "Jean-Luc Picard",  "enum": [ "Patrick Stewart" ] },
+            { "title": "Jack Harkness",    "enum": [ "John Barrowman"  ] },
+            { "title": "Malcolm Reynolds", "enum": [ "Nathan Fillion"  ] }
+          ]
+        },
+        "captain3": {
+          "title": "Favorite captain 3",
+          "description": "oneOf array with const items in schema (JSON Schema v6+)",
+          "type": "string",
+          "oneOf":  [
+            { "title": "James T. Kirk",    "const": "William Shatner" },
+            { "title": "Jean-Luc Picard",  "const": "Patrick Stewart" },
+            { "title": "Jack Harkness",    "const": "John Barrowman"  },
+            { "title": "Malcolm Reynolds", "const": "Nathan Fillion"  }
+          ]
+        },
+        "captain4": {
+          "title": "Favorite captain 4",
+          "description": "titleMap array in layout (<a href=\"http://schemaform.io/examples/bootstrap-example.html#/65b7b86938bddeb30b149d47bd595f56\">Angular Schema Form</a>)",
+          "type": "string"
+        },
+        "captain5": {
+          "title": "Favorite captain 5",
+          "description": "enum + enumNames in schema (<a href=\"https://mozilla-services.github.io/react-jsonschema-form/\">React jsonschema form</a>)",
+          "type": "string",
+          "enum":       [ "William Shatner",
+            "Patrick Stewart",
+            "John Barrowman",
+            "Nathan Fillion" ],
+          "enumNames":  [ "James T. Kirk",
+            "Jean-Luc Picard",
+            "Jack Harkness",
+            "Malcolm Reynolds" ]
+        },
+        "captain6": {
+          "title": "Favorite captain 6",
+          "description": "titleMap object in layout (<a href=\"http://ulion.github.io/jsonform/playground/?example=fields-select\">JSON Form</a>)",
+          "type": "string"
+        },
+        "captain7": {
+          "title": "Favorite captain 7",
+          "description": "flat titleMap array with groups in layout",
+          "type": "string"
+        },
+        "captain8": {
+          "title": "Favorite captain 8",
+          "description": "hierarchical titleMap array in layout",
+          "type": "string"
+        },
+        "captain9": {
+          "title": "Favorite captain 9",
+          "description": "oneOf array with <strong>title: \"group: name\"</strong> in schema",
+          "type": "string",
+          "oneOf": [
+            { "title": "Star Trek: James T. Kirk",   "const": "William Shatner" },
+            { "title": "Star Trek: Jean-Luc Picard", "const": "Patrick Stewart" },
+            { "title": "Torchwood: Jack Harkness",   "const": "John Barrowman"  },
+            { "title": "Firefly: Malcolm Reynolds",  "const": "Nathan Fillion"  }
+          ]
+        }
+      }
+    }
+  
+   }
+  
