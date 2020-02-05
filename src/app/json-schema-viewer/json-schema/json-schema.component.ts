@@ -144,9 +144,9 @@ export class JsonSchemaComponent implements OnInit {
       .append("svg").attr("x", 0).attr("y", 0)
       .style("border", "1px solid black")
       .style("margin-right", "20px")
-      .attr("viewBox", `10 10 ${this.width / 3} , ${this.height / 3 + 200}`)
-      .attr("width", "45rem")
-      .attr("height", "25rem")
+      .attr("viewBox", `-100 -100 ${this.width * 2} , ${this.height * 2}`)
+      .attr("width", this.width / 1.2)
+      .attr("height", this.height)
       .append("g")
       .attr(
         "transform",
@@ -426,7 +426,7 @@ export class JsonSchemaComponent implements OnInit {
 
     // Normalize for fixed-depth.
     nodes.forEach(function (d) {
-      d.y = d.depth * 120;
+      d.y = d.depth * 240
     });
 
     // Update the nodes…
@@ -558,7 +558,7 @@ export class JsonSchemaComponent implements OnInit {
       );
 
     nodeEnter
-      .append("text")
+      .append("text").style("font", "22px sans-serif")
       .attr("x", function (d: any) {
         return d.children || d._children ? -13 : 13;
       })
@@ -610,7 +610,7 @@ export class JsonSchemaComponent implements OnInit {
         this.svg.selectAll('circle')[0].forEach((nodeElem, index) => {
           if (nodeElem.attributes && nodeElem.attributes.id && nodeElem.attributes.id.value === elemArr.start_circle_id) {
             // @ts-ignore
-            d3.select(nodeElem.parentNode).append("text")
+            d3.select(nodeElem.parentNode).append("text").style("font", "22px sans-serif")
               .attr("x", function (d: any) {
                 return d.children || d._children ? 13 : -13;
               })
@@ -634,7 +634,7 @@ export class JsonSchemaComponent implements OnInit {
           if (nodeElem.attributes && nodeElem.attributes.id && nodeElem.attributes.id.value === elemArr.end_circle_id) {
 
             // @ts-ignore
-            d3.select(nodeElem.parentNode).append("text")
+            d3.select(nodeElem.parentNode).append("text").style("font", "22px sans-serif")
               .attr("x", function (d: any) {
                 return d.children || d._children ? 13 : -13;
               })

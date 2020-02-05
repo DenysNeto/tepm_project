@@ -87,13 +87,13 @@ export class JsonSchemaViewerSecondComponent implements OnInit {
     });
 
   onClickHandler(event) {
-    console.log("[]ceee ", event);
+
   }
 
 
   ngAfterViewInit() {
 
-
+    console.log("[]ceee ", window.innerWidth);
     this.jsonSchemaService.finishMapping.subscribe(elemSubscriber => {
       {
         // @ts-ignore
@@ -155,9 +155,9 @@ export class JsonSchemaViewerSecondComponent implements OnInit {
       .append("svg")
       .style("border", "1px solid black")
       .style("marginRight", "20px")
-      .attr("viewBox", `0 0 ${this.width / 3} , ${this.height / 3 + 200}`)
-      .attr("width", "45rem")
-      .attr("height", "25rem")
+      .attr("viewBox", `-100 -100 ${this.width * 2} , ${this.height * 2}`)
+      .attr("width", this.width / 1.2)
+      .attr("height", this.height)
       .append("g")
       .attr(
         "transform",
@@ -466,7 +466,7 @@ export class JsonSchemaViewerSecondComponent implements OnInit {
 
     // Normalize for fixed-depth.
     nodes.forEach(function (d) {
-      d.y = d.depth * 120;
+      d.y = d.depth * 240;
     });
 
     // Update the nodes…
@@ -610,7 +610,7 @@ export class JsonSchemaViewerSecondComponent implements OnInit {
       .text(function (d: any) {
         return d.name;
       })
-      .style("fill-opacity", 1e-6)
+      .style("fill-opacity", 1e-6).style("font", "22px sans-serif")
       .call(
         // @ts-ignore
         d3.behavior.drag().on("drag", (d: any) => {
@@ -649,7 +649,7 @@ export class JsonSchemaViewerSecondComponent implements OnInit {
             // @ts-ignore
             console.log('[id]r', nodeElem.attributes.id)
             // @ts-ignore
-            d3.select(nodeElem.parentNode).append("text")
+            d3.select(nodeElem.parentNode).append("text").style("font", "22px sans-serif")
               .attr("x", function (d: any) {
                 return d.children || d._children ? 13 : -13;
               })
@@ -671,7 +671,7 @@ export class JsonSchemaViewerSecondComponent implements OnInit {
           if (nodeElem.attributes && nodeElem.attributes.id && nodeElem.attributes.id.value === elemArr.start_circle_id) {
 
             // @ts-ignore
-            d3.select(nodeElem.parentNode).append("text")
+            d3.select(nodeElem.parentNode).append("text").style("font", "22px sans-serif")
               .attr("x", function (d: any) {
                 return d.children || d._children ? 13 : -13;
               })
