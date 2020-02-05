@@ -2,11 +2,48 @@
 
   display: flex;
   flex-direction: row;
-  justify-content: flex-start;
-  width: 100%;
+  align-items: flex-start;
+  justify-content: center;
+  height: auto;
+  width: auto;
+
+  overflow: hidden;
+}
+
+
+.mat-list {
+  height: 20rem;
+}
+
+.mat-list-item {
   height: 100%;
-  z-index: 1;
-  overflow: visible;
+
+
+}
+
+.list-item {
+  padding: .5rem
+}
+
+
+
+.list-wrapper {
+  display: flex;
+  width: 30rem;
+  flex-direction: column;
+  justify-self: center;
+  justify-content: center;
+  margin: 5rem;
+  max-height: 20rem;
+  overflow-y: scroll;
+  border: 1px solid black;
+}
+
+.list-main-wrapper {
+
+  width: 100%;
+  display: flex;
+  justify-content: center;
 
 
 }

@@ -3,6 +3,7 @@ import { CommonModule } from "@angular/common";
 import { JsonSchemaComponent } from "./json-schema/json-schema.component";
 import { JsonSchemaWrapperComponent } from "./json-schema-wrapper/json-schema-wrapper.component";
 import { JsonSchemaViewerSecondComponent } from "./json-schema-viewer-second/json-schema-viewer-second.component";
+import {MatListModule} from '@angular/material';
 
 @NgModule({
   declarations: [
@@ -15,7 +16,7 @@ import { JsonSchemaViewerSecondComponent } from "./json-schema-viewer-second/jso
     JsonSchemaWrapperComponent,
     JsonSchemaViewerSecondComponent
   ],
-  imports: [CommonModule],
+  imports: [CommonModule, MatListModule],
   providers: []
 })
 export class JsonSchemaViewerModule {}

@@ -4,6 +4,7 @@ import { FormsModule } from '@angular/forms';
 
 import { AppComponent } from './app.component';
 import {JsonSchemaViewerModule} from './json-schema-viewer/json-schema-viewer.module';
+import { NoopAnimationsModule } from '@angular/platform-browser/animations';
 
 
 @NgModule({
@@ -14,7 +15,8 @@ import {JsonSchemaViewerModule} from './json-schema-viewer/json-schema-viewer.mo
   imports: [
     BrowserModule,
     FormsModule,
-    JsonSchemaViewerModule
+    JsonSchemaViewerModule,
+    NoopAnimationsModule
   ],
   bootstrap: [AppComponent]
 })

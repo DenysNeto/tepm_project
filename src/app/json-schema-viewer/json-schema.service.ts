@@ -8,10 +8,15 @@ type TreeElement = {
   children: TreeElement[];
 }
 
-type DrawableLine = {
-  start_circle_id: number,
-  end_circle_id: number,
-  line_id: number,
+export type Mapping = {
+  start_from: number,
+  start_text: string,
+  start_circle_id?: number,
+  end_circle_id?: number,
+  end_of?: number,
+  mapping_id?: number,
+  end_text: string,
+
 
 }
 
@@ -31,11 +36,14 @@ export class JsonSchemaService {
 
 
 
-  initiateDrawLine: BehaviorSubject<{ x: number, y: number, isStartFromSecond: boolean, start_id: number }> = new BehaviorSubject<{ x: number, y: number, start_id: number, isStartFromSecond: boolean }>({ x: 0, y: 0, start_id: 0, isStartFromSecond: false })
-  finishDrawLine: BehaviorSubject<{ x: number, y: number, isStartFromSecond?: boolean, finish_id: number }> = new BehaviorSubject<{ x: number, y: number, finish_id: number, isStartFromSecond?: boolean }>({ x: 0, y: 0, finish_id: 0, isStartFromSecond: false })
+  startMapping: BehaviorSubject<{ isStartFromSecond: boolean, start_id: number, startFieldLabel: string }> = new BehaviorSubject<{ start_id: number, isStartFromSecond: boolean, startFieldLabel: string }>({ start_id: 0, isStartFromSecond: false, startFieldLabel: '' })
+  translateJson_first: BehaviorSubject<{ x: number, y: number }> = new BehaviorSubject<{ x: number, y: number }>({ x: 0, y: 0 });
+  translateJson_second: BehaviorSubject<{ x: number, y: number }> = new BehaviorSubject<{ x: number, y: number }>({ x: 0, y: 0 });
+  finishMapping: BehaviorSubject<{ isStartFromSecond?: boolean, finish_id: number, finishFieldLabel: string }> = new BehaviorSubject<{ finish_id: number, isStartFromSecond?: boolean, finishFieldLabel: string }>({ finish_id: 0, isStartFromSecond: false, finishFieldLabel: "" })
   isLineDrawing: boolean = false;
   startFrom: number = 0;
-  drawableLinesArr: DrawableLine[] = [];
+
+  mapTable: Mapping[] = [];
 
   setIsLineDrawing = (value: boolean) => {
     this.isLineDrawing = value;
@@ -58,12 +66,12 @@ export class JsonSchemaService {
 
   //contains two jsons Hierchy that we got from server
   treeData: any = [{
-    name: '{}',
+    name: 'JSON 1 {}',
     parent: null,
     children: []
   },
   {
-    name: '{}',
+    name: 'JSON 2 {}',
     parent: null,
     children: []
   }];
@@ -72,8 +80,8 @@ export class JsonSchemaService {
   }
 
 
-  addLineToDrawable(elem: DrawableLine) {
-    this.drawableLinesArr.push(elem)
+  addMappingToList = (elem: Mapping) => {
+    this.mapTable.push(elem)
   }
 
   recursivePush(obj, tree, currentField?) {
