@@ -12,7 +12,7 @@
 
 
 .mat-list {
-  height: 20rem;
+  height: 15rem;
 }
 
 .mat-list-item {
@@ -28,15 +28,17 @@
 
 
 .list-wrapper {
+  padding: 1.5rem;
   display: flex;
   width: 30rem;
   flex-direction: column;
   justify-self: center;
   justify-content: center;
-  margin: 5rem;
-  max-height: 20rem;
-  overflow-y: scroll;
-  border: 1px solid black;
+  margin: 3rem;
+  max-height: 15rem;
+  overflow-y: auto;
+  overflow-x: auto;
+  border: 2px solid black;
 }
 
 .list-main-wrapper {
