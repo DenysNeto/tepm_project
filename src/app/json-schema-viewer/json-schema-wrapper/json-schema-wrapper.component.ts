@@ -1,31 +1,35 @@
-import { Component, OnInit } from "@angular/core";
-import { JsonSchemaService, Mapping } from "../json-schema.service";
+import { Component, OnInit } from '@angular/core';
+import { JsonSchemaService, Mapping } from '../json-schema.service';
 import { IfStmt } from '@angular/compiler';
 
 const delta_y = 30;
 const translateDefault = {
   x: 0,
   y: 200
-}
+};
 
 @Component({
-  selector: "app-json-schema-wrapper",
-  templateUrl: "./json-schema-wrapper.component.html",
-  styleUrls: ["./json-schema-wrapper.component.css"]
+  selector: 'app-json-schema-wrapper',
+  templateUrl: './json-schema-wrapper.component.html',
+  styleUrls: ['./json-schema-wrapper.component.css']
 })
 export class JsonSchemaWrapperComponent implements OnInit {
   constructor(private jsonSchemaService: JsonSchemaService) {
 
 
+  }
 
+
+  handleDeleteEvent(event, mapElement) {
+    console.log('click', mapElement);
+    this.jsonSchemaService.deleteMappingSubject.next(mapElement);
+    this.jsonSchemaService.deleteMappingFromList(mapElement);
 
   }
 
 
-  currentMappingElement = {
-
-  }
-
+  currentMappingElement = {};
+  underlienIndex: number = -1;
   map_id: number = 0;
   svg: any;
   width = window.innerWidth;
@@ -39,13 +43,19 @@ export class JsonSchemaWrapperComponent implements OnInit {
     line_id: 0,
     x_start: 0,
     y_start: 0
-  }
-
-
-
+  };
 
 
   ngOnInit() {
+
+
+    this.jsonSchemaService.underlineMappingSubject.subscribe(underlineIndex => {
+
+      this.underlienIndex = underlineIndex;
+
+
+    })
+
     // @ts-ignore
     // this.svg = d3
     //   .select("#wrapper")
@@ -64,10 +74,6 @@ export class JsonSchemaWrapperComponent implements OnInit {
     // this.svg.style("y", 21);
 
 
-
-
-
-
     this.jsonSchemaService.startMapping.subscribe(elem => {
       if (elem.startFieldLabel !== '') {
 
@@ -77,14 +83,14 @@ export class JsonSchemaWrapperComponent implements OnInit {
           start_circle_id: elem.start_id,
 
 
-        }
+        };
 
 
-      };
+      }
+      ;
 
 
     });
-
 
 
     this.jsonSchemaService.finishMapping.subscribe(elem => {
@@ -94,7 +100,7 @@ export class JsonSchemaWrapperComponent implements OnInit {
           end_circle_id: elem.finish_id,
           end_text: elem.finishFieldLabel,
           end_of: (this.currentMappingElement as Mapping).start_from === 2 ? 1 : 2,
-          mapping_id: this.jsonSchemaService.mapTable.length + 1
+          mapping_id: ++this.jsonSchemaService.currentMappingIndex
         };
 
 
@@ -102,24 +108,19 @@ export class JsonSchemaWrapperComponent implements OnInit {
         this.currentMappingElement = {};
 
 
-
       }
 
 
-    })
+    });
 
 
     //this.jsonSchemaService.finishDrawLine.subscribe(elem => {
-
 
 
     //add to list
 
     //start from
     //label_name _1 => label_name_2
-
-
-
 
 
     // this.jsonSchemaService.translateJson_first.subscribe(payload => {
@@ -195,9 +196,6 @@ export class JsonSchemaWrapperComponent implements OnInit {
     //     })
     //   }
     // });
-
-
-
 
 
   }

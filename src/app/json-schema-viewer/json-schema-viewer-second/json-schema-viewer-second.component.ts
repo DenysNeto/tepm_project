@@ -28,7 +28,7 @@ export class JsonSchemaViewerSecondComponent implements OnInit {
   root;
   svg;
   duration;
-  margin = { top: 200, right: 10, bottom: 20, left: 0 };
+  margin = { top: 200, right: 0, bottom: 20, left: 20 };
   width = window.innerWidth / 2 - this.margin.right - this.margin.left;
   height = (window.innerHeight - this.margin.top - this.margin.bottom) * 0.9;
   currentScale: number = 1;
@@ -93,7 +93,23 @@ export class JsonSchemaViewerSecondComponent implements OnInit {
 
   ngAfterViewInit() {
 
-    console.log("[]ceee ", window.innerWidth);
+
+
+
+
+    this.jsonSchemaService.deleteMappingSubject.subscribe((elementMapping) => {
+
+      this.svg.selectAll('text')[0].forEach((textElem) => {
+
+        let tempCurrentMappingLabel = elementMapping.start_from == 1 ? elementMapping.end_circle_id : elementMapping.start_circle_id;
+
+        if (textElem.attributes.id && textElem.attributes.id.value == tempCurrentMappingLabel) {
+          textElem.remove();
+        }
+      })
+    })
+
+
     this.jsonSchemaService.finishMapping.subscribe(elemSubscriber => {
       {
         // @ts-ignore
@@ -113,14 +129,21 @@ export class JsonSchemaViewerSecondComponent implements OnInit {
               // @ts-ignore
               d3.select(elem.parentNode).append("text")
                 .attr("x", function (d: any) {
-                  return d.children || d._children ? 13 : -13;
-                })
-                .attr("dy", ".35em")
+                  return d.children || d._children ? -13 : 13;
+                  // @ts-ignore
+                }).attr("id", d => d.id).attr('transform', 'rotate(180 0 0)')
+                .attr("dy", ".35em").style("font", "28px sans-serif").style("font-style", "italic").style('fill', 'red')
                 .attr("text-anchor", function (d: any) {
-                  return d.children || d._children ? "start" : "end";
-                })
+                  return d.children || d._children ? "end" : "start";
+                }).attr("mapping_id", this.jsonSchemaService.currentMappingIndex)
                 .text((d: any) => {
-                  return `Mapping ${this.jsonSchemaService.mapTable.length}`;
+                  return `MAPPING ${this.jsonSchemaService.currentMappingIndex}`;
+                }).on("mouseenter", (d) => {
+                  // @ts-ignore
+                  this.jsonSchemaService.setUnderlineMappingIndex(d3.event.toElement.attributes.mapping_id.value);
+                }).on("mouseleave", () => {
+                  this.jsonSchemaService.setUnderlineMappingIndex(-1);
+
                 })
             }
           })
@@ -152,12 +175,12 @@ export class JsonSchemaViewerSecondComponent implements OnInit {
     // @ts-ignore
     this.svg = d3
       .select("app-json-schema-viewer-second")
-      .append("svg")
-      .style("border", "1px solid black")
+      .append("svg").attr('transform', 'rotate(180 0 0)')
+      .style("border", "1px solid silver")
       .style("marginRight", "20px")
       .attr("viewBox", `-100 -100 ${this.width * 2} , ${this.height * 2}`)
-      .attr("width", this.width / 1.2)
-      .attr("height", this.height)
+      .attr("width", this.width / 1.3)
+      .attr("height", this.height * 1.2)
       .append("g")
       .attr(
         "transform",
@@ -184,13 +207,13 @@ export class JsonSchemaViewerSecondComponent implements OnInit {
             // @ts-ignore
             let dx0 =
               // @ts-ignore
-              d3.transform(this.svg.attr("transform")).translate[1] +
+              d3.transform(this.svg.attr("transform")).translate[1] -
               // @ts-ignore
               d3.event.sourceEvent.movementY * 1.5;
             // @ts-ignore
             let dy0 =
               // @ts-ignore
-              d3.transform(this.svg.attr("transform")).translate[0] +
+              d3.transform(this.svg.attr("transform")).translate[0] -
               // @ts-ignore
               d3.event.sourceEvent.movementX * 1.5;
 
@@ -406,25 +429,47 @@ export class JsonSchemaViewerSecondComponent implements OnInit {
   click = d => {
 
     // @ts-ignore
-    if (d3.event.ctrlKey) {
+    if (d3.select(d3.event.target.parentNode).selectAll('text')[0].length < 2) {
+
       // @ts-ignore
-      console.log('circle click', d3.event);
-      if (!(this.jsonSchemaService.startFrom === 2) && this.jsonSchemaService.isLineDrawing) {
-        // @ts-ignore
-        let label_name = d3.select(d3.event.target.parentNode).select('text')[0][0].innerHTML;
+      if (d3.event.ctrlKey && !this.jsonSchemaService.isLineDrawing) {
 
         // @ts-ignore
-        this.jsonSchemaService.finishMapping.next({ finish_id: d3.event.target.id, isStartFromSecond: false, finishFieldLabel: label_name });
-        this.jsonSchemaService.setIsLineDrawing(false);
+
+        d3.select(d3.event.target).attr('previousFill', d3.event.target.style.fill).style('fill', "green");
+      }
+      else if (this.jsonSchemaService.isLineDrawing && this.jsonSchemaService.startFrom === 2) {
+        // @ts-ignore
+        d3.select(d3.event.target).attr('previousFill', d3.event.target.style.fill).style('fill', "red");
+      }
+    }
+
+    // @ts-ignore
+    if (d3.event.ctrlKey && d3.event.toElement.nodeName == 'circle') {
+      // @ts-ignore
+      if (!(this.jsonSchemaService.startFrom === 2) && this.jsonSchemaService.isLineDrawing) {
+        // @ts-ignore
+        if (d3.select(d3.event.target.parentNode).selectAll('text')[0].length < 2) {
+          // @ts-ignore
+          let label_name = d3.select(d3.event.target.parentNode).select('text')[0][0].innerHTML;
+          // @ts-ignore
+          this.jsonSchemaService.finishMapping.next({ finish_id: d3.event.target.id, isStartFromSecond: false, finishFieldLabel: label_name });
+          this.jsonSchemaService.setIsLineDrawing(false);
+        }
         // this.jsonSchemaService.setStartFrom(0);
       }
       else {
         // @ts-ignore
-        let label_name = d3.select(d3.event.target.parentNode).select('text')[0][0].innerHTML;
-        // @ts-ignore
-        this.jsonSchemaService.startMapping.next({ isStartFromSecond: true, start_id: d3.event.target.id, startFieldLabel: label_name })
-        this.jsonSchemaService.setStartFrom(2);
-        this.jsonSchemaService.setIsLineDrawing(true);
+        if (d3.select(d3.event.target.parentNode).selectAll('text')[0].length < 2) {
+
+          // @ts-ignore
+          let label_name = d3.select(d3.event.target.parentNode).select('text')[0][0].innerHTML;
+          // @ts-ignore
+          this.jsonSchemaService.startMapping.next({ isStartFromSecond: true, start_id: d3.event.target.id, startFieldLabel: label_name })
+          this.jsonSchemaService.setStartFrom(2);
+          this.jsonSchemaService.setIsLineDrawing(true);
+        }
+
 
       }
 
@@ -466,7 +511,8 @@ export class JsonSchemaViewerSecondComponent implements OnInit {
 
     // Normalize for fixed-depth.
     nodes.forEach(function (d) {
-      d.y = d.depth * 240;
+      d.y = d.depth * 360;
+
     });
 
     // Update the nodes…
@@ -511,19 +557,20 @@ export class JsonSchemaViewerSecondComponent implements OnInit {
       .attr("r", 1e-6)
       .on("mouseenter", () => {
         // @ts-ignore
-
-        // @ts-ignore
-        if (d3.event.ctrlKey && !this.jsonSchemaService.isLineDrawing) {
-
+        if (d3.select(d3.event.target.parentNode).selectAll('text')[0].length < 2) {
           // @ts-ignore
-
-          d3.select(d3.event.target).attr('previousFill', d3.event.target.style.fill).style('fill', "green");
-        }
-        // @ts-ignore
-        else if (d3.event.ctrlKey && this.jsonSchemaService.isLineDrawing && this.jsonSchemaService.startFrom === 1) {
+          if (d3.event.ctrlKey && !this.jsonSchemaService.isLineDrawing) {
+            // @ts-ignore
+            d3.select(d3.event.target).attr('previousFill', d3.event.target.style.fill).style('fill', "green");
+          }
           // @ts-ignore
-          d3.select(d3.event.target).attr('previousFill', d3.event.target.style.fill).style('fill', "red");
+          else if (d3.event.ctrlKey && this.jsonSchemaService.isLineDrawing && this.jsonSchemaService.startFrom === 1) {
+            // @ts-ignore
+            d3.select(d3.event.target).attr('previousFill', d3.event.target.style.fill).style('fill', "red");
+          }
+
         }
+
       }).on("mousemove", () => {
         // @ts-ignore
         if (!d3.event.ctrlKey && d3.event.target.attributes.previousFill && (!this.jsonSchemaService.isLineDrawing || this.jsonSchemaService.startFrom === 1)) {
@@ -553,13 +600,13 @@ export class JsonSchemaViewerSecondComponent implements OnInit {
             // @ts-ignore
             let dx0 =
               // @ts-ignore
-              d3.transform(this.svg.attr("transform")).translate[1] +
+              d3.transform(this.svg.attr("transform")).translate[1] -
               // @ts-ignore
               d3.event.sourceEvent.movementY * 1.5;
             // @ts-ignore
             let dy0 =
               // @ts-ignore
-              d3.transform(this.svg.attr("transform")).translate[0] +
+              d3.transform(this.svg.attr("transform")).translate[0] -
               // @ts-ignore
               d3.event.sourceEvent.movementX * 1.5;
             // @ts-ignore
@@ -598,32 +645,32 @@ export class JsonSchemaViewerSecondComponent implements OnInit {
       );
 
     nodeEnter
-      .append("text")
+      .append("text").attr('transform', 'rotate(180 0 0)')
       .attr("x", function (d: any) {
 
-        return d.children || d._children ? -13 : 13;
+        return d.children || d._children ? 13 : -13;
       })
       .attr("dy", ".35em")
       .attr("text-anchor", function (d: any) {
-        return d.children || d._children ? "end" : "start";
+        return d.children || d._children ? "start" : "end";
       })
       .text(function (d: any) {
         return d.name;
       })
-      .style("fill-opacity", 1e-6).style("font", "22px sans-serif")
+      .style("fill-opacity", 1e-6).style("font", "28px sans-serif")
       .call(
         // @ts-ignore
         d3.behavior.drag().on("drag", (d: any) => {
           // @ts-ignore
           let dx0 =
             // @ts-ignore
-            d3.transform(this.svg.attr("transform")).translate[1] +
+            d3.transform(this.svg.attr("transform")).translate[1] -
             // @ts-ignore
             d3.event.sourceEvent.movementY * 1.5;
           // @ts-ignore
           let dy0 =
             // @ts-ignore
-            d3.transform(this.svg.attr("transform")).translate[0] +
+            d3.transform(this.svg.attr("transform")).translate[0] -
             // @ts-ignore
             d3.event.sourceEvent.movementX * 1.5;
 
@@ -644,21 +691,27 @@ export class JsonSchemaViewerSecondComponent implements OnInit {
       if (elemArr.start_from === 1) {
 
         this.svg.selectAll('circle')[0].forEach((nodeElem, index) => {
-          console.log('[id]r', nodeElem.attributes.id);
-          if (nodeElem.attributes && nodeElem.attributes.id && nodeElem.attributes.id.value === elemArr.end_circle_id) {
+          //let isMappedLabelExists = false;
+
+          if (nodeElem.attributes && nodeElem.attributes.id && nodeElem.attributes.id.value === elemArr.end_circle_id && nodeElem.parentNode.children.length === 2) {
             // @ts-ignore
             console.log('[id]r', nodeElem.attributes.id)
             // @ts-ignore
-            d3.select(nodeElem.parentNode).append("text").style("font", "22px sans-serif")
+            d3.select(nodeElem.parentNode).append("text").style("font", "28px sans-serif")
               .attr("x", function (d: any) {
-                return d.children || d._children ? 13 : -13;
+                return d.children || d._children ? -13 : 13;
               })
-              .attr("dy", ".35em")
+              .attr("dy", ".35em").attr("mapping_id", elemArr.mapping_id)
               .attr("text-anchor", function (d: any) {
-                return d.children || d._children ? "start" : "end";
-              })
+                return d.children || d._children ? "end" : "start";
+              }).attr('transform', 'rotate(180 0 0)')
               .text((d: any) => {
-                return `Mapping ${elemArr.mapping_id}`;
+                return `MAPPING ${elemArr.mapping_id}`;
+              }).style("font", "28px sans-serif").style("font-style", "italic").style('fill', 'red').on("mouseenter", (d) => {
+                // @ts-ignore
+                this.jsonSchemaService.setUnderlineMappingIndex(d3.event.toElement.attributes.mapping_id.value);
+              }).on("mouseleave", (d) => {
+                this.jsonSchemaService.setUnderlineMappingIndex(-1);
               })
           }
         })
@@ -668,19 +721,24 @@ export class JsonSchemaViewerSecondComponent implements OnInit {
 
         nodeEnter.forEach((nodeElem, index) => {
 
-          if (nodeElem.attributes && nodeElem.attributes.id && nodeElem.attributes.id.value === elemArr.start_circle_id) {
+          if (nodeElem.attributes && nodeElem.attributes.id && nodeElem.attributes.id.value === elemArr.start_circle_id && nodeElem.parentNode.children.length === 2) {
 
             // @ts-ignore
-            d3.select(nodeElem.parentNode).append("text").style("font", "22px sans-serif")
+            d3.select(nodeElem.parentNode).append("text").style("font", "28px sans-serif")
               .attr("x", function (d: any) {
-                return d.children || d._children ? 13 : -13;
+                return d.children || d._children ? -13 : 13;
               })
-              .attr("dy", ".50em")
+              .attr("dy", ".35em").attr("mapping_id", elemArr.mapping_id)
               .attr("text-anchor", function (d: any) {
-                return d.children || d._children ? "start" : "end";
+                return d.children || d._children ? "end" : "start";
               })
               .text((d: any) => {
-                return `Mapping ${elemArr.mapping_id}`;
+                return `MAPPING ${elemArr.mapping_id}`;
+              }).style("font", "28px sans-serif").style("font-style", "italic").style('fill', 'red').on("mouseenter", (d) => {
+                // @ts-ignore
+                this.jsonSchemaService.setUnderlineMappingIndex(d3.event.toElement.attributes.mapping_id.value);
+              }).on("mouseleave", (d) => {
+                this.jsonSchemaService.setUnderlineMappingIndex(-1);
               })
 
 

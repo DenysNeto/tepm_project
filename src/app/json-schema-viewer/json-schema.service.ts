@@ -1,5 +1,7 @@
 import { Injectable } from '@angular/core';
 import { BehaviorSubject } from 'rxjs/internal/BehaviorSubject';
+import { Subject } from 'rxjs';
+import { ElementSchemaRegistry } from '@angular/compiler';
 
 
 type TreeElement = {
@@ -36,10 +38,17 @@ export class JsonSchemaService {
 
 
 
-  startMapping: BehaviorSubject<{ isStartFromSecond: boolean, start_id: number, startFieldLabel: string }> = new BehaviorSubject<{ start_id: number, isStartFromSecond: boolean, startFieldLabel: string }>({ start_id: 0, isStartFromSecond: false, startFieldLabel: '' })
+  currentMappingIndex: number = 0;
+
+  deleteMappingSubject: Subject<Mapping> = new Subject<Mapping>();
+  underlineMappingSubject: Subject<number> = new Subject<number>();
+
+  underlineMappingIndex: number = -1;
+
+  startMapping: BehaviorSubject<{ isStartFromSecond: boolean, start_id: number, startFieldLabel: string }> = new BehaviorSubject<{ start_id: number, isStartFromSecond: boolean, startFieldLabel: string }>({ start_id: 0, isStartFromSecond: false, startFieldLabel: '' });
   translateJson_first: BehaviorSubject<{ x: number, y: number }> = new BehaviorSubject<{ x: number, y: number }>({ x: 0, y: 0 });
   translateJson_second: BehaviorSubject<{ x: number, y: number }> = new BehaviorSubject<{ x: number, y: number }>({ x: 0, y: 0 });
-  finishMapping: BehaviorSubject<{ isStartFromSecond?: boolean, finish_id: number, finishFieldLabel: string }> = new BehaviorSubject<{ finish_id: number, isStartFromSecond?: boolean, finishFieldLabel: string }>({ finish_id: 0, isStartFromSecond: false, finishFieldLabel: "" })
+  finishMapping: BehaviorSubject<{ isStartFromSecond?: boolean, finish_id: number, finishFieldLabel: string }> = new BehaviorSubject<{ finish_id: number, isStartFromSecond?: boolean, finishFieldLabel: string }>({ finish_id: 0, isStartFromSecond: false, finishFieldLabel: "" });
   isLineDrawing: boolean = false;
   startFrom: number = 0;
 
@@ -52,6 +61,13 @@ export class JsonSchemaService {
   setStartFrom = (value: number) => {
     this.startFrom = value;
   }
+
+
+  setUnderlineMappingIndex(value: number) {
+    console.log("value", value);
+    this.underlineMappingIndex = value;
+  }
+
 
   viewBoardDimensions = {
     width: 0,
@@ -80,8 +96,28 @@ export class JsonSchemaService {
   }
 
 
+  findMappingElemByMappingId(mappingId: number) {
+
+    return this.mapTable.find(elem => {
+      if (elem.mapping_id === mappingId) {
+        return elem;
+      }
+    })
+  }
+
   addMappingToList = (elem: Mapping) => {
     this.mapTable.push(elem)
+  }
+
+  deleteMappingFromList(elem: Mapping) {
+
+
+
+    let tempIndex = this.mapTable.indexOf(elem);
+    if (tempIndex !== -1) {
+      this.mapTable.splice(tempIndex, 1);
+    }
+
   }
 
   recursivePush(obj, tree, currentField?) {

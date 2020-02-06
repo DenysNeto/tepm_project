@@ -1,22 +1,22 @@
 <div id="wrapper">
+  <div *ngIf='this.jsonSchemaService.mapTable.length' class='list-main-wrapper'>
+    <div class='title-wrapper'>
+      <p>Mapping Block</p>
+    </div>
+    <div class='list-wrapper'>
+      <mat-list class="list-item">
+        <mat-list-item [ngClass]="{red: this.jsonSchemaService.underlineMappingIndex == map.mapping_id}"
+          class="list-item" *ngFor="let map of this.jsonSchemaService.mapTable; let indexMap = index">
+          MAPPING {{map.mapping_id}}<br>
+          [JSON_{{map.start_from}}] {{ map.start_text}}<br>
+          [JSON_{{map.end_of}}] {{ map.end_text}}
+          <mat-divider></mat-divider>
+          <mat-icon (click)="handleDeleteEvent($event , map)" aria-hidden="false" aria-label="Example home icon">delete
+          </mat-icon>
+        </mat-list-item>
+      </mat-list>
+    </div>
+  </div>
   <app-json-schema></app-json-schema>
   <app-json-schema-viewer-second></app-json-schema-viewer-second>
-</div>
-
-
-
-
-<div *ngIf='this.jsonSchemaService.mapTable.length' class='list-main-wrapper'>
-  <div class='list-wrapper'>
-    <mat-list>
-
-      <mat-list-item class="list-item" style='width:30rem'
-        *ngFor="let map of this.jsonSchemaService.mapTable; let indexMap = index">
-        Mapping {{map.mapping_id}} [JSON_{{map.start_from}}] {{ map.start_text}} => [JSON_{{map.end_of}}]
-        {{ map.end_text}}
-        <mat-divider></mat-divider>
-      </mat-list-item>
-
-    </mat-list>
-  </div>
 </div>
