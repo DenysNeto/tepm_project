@@ -1,10 +1,8 @@
 import { Component, OnInit, ViewChild } from "@angular/core";
 // @ts-ignore
-
 import { JsonSchemaService } from "../json-schema.service";
 import { ifError } from 'assert';
 import { text } from 'd3';
-
 // @ts-ignore
 let diagonal = d3.svg.diagonal().projection(function (d) {
   return [d.y, d.x];
@@ -20,14 +18,11 @@ export class JsonSchemaComponent implements OnInit {
   json = require("../testJSON.json");
   circle_id: number = 0;
   position_before: { x: number; y: number } = { x: 0, y: 0 };
-
   position_after: { x: number; y: number } = { x: 0, y: 0 };
-
   isDragged: boolean = false;
   deltaDragging: { x: number; y: number } = { x: 0, y: 0 };
   // @ts-ignore
   tree = d3.layout.tree();
-
   @ViewChild("btn", { static: false }) btn;
   root;
   svg;
@@ -42,23 +37,17 @@ export class JsonSchemaComponent implements OnInit {
   handleZoomPlus() {
     // @ts-ignore
     this.zoom.scale(3);
-
     this.zoom.event(this.svg);
   }
 
   handleZoomMinus() {
-    console.log("[c] zoomMinus");
     this.currentScale -= 0.25;
     this.svg.call(
       // @ts-ignore
       d3.behavior
         .zoom()
-        // .extent([[0, 0], [this.width, this.height]])
-
         .on("zoom", d => {
           // @ts-ignore
-          console.log("ca", d);
-
           this.svg.attr(
             "transform",
             "translate(" +
@@ -76,13 +65,7 @@ export class JsonSchemaComponent implements OnInit {
     // @ts-ignore
     d3.behavior.zoom().on("zoom", d => { });
 
-  onClickHandler(event) { }
-
-
-
   ngAfterViewInit() {
-
-
     this.jsonSchemaService.deleteMappingSubject.subscribe((elementMapping) => {
 
       this.svg.selectAll('text')[0].forEach((textElem) => {
@@ -93,17 +76,12 @@ export class JsonSchemaComponent implements OnInit {
         }
       })
     })
-
-
     this.jsonSchemaService.finishMapping.subscribe(elemSubscriber => {
       {
         // @ts-ignore
         if (this.jsonSchemaService.mapTable.length > 0) {
-
           this.svg.selectAll('circle')[0].forEach(elem => {
-
             if (elem.attributes.previousFill && elem.attributes.previousFill !== elem.style.fill) {
-
               // @ts-ignore
               d3.select(elem).style('fill', elem.attributes.previousFill.value)
 
@@ -130,32 +108,25 @@ export class JsonSchemaComponent implements OnInit {
                   this.jsonSchemaService.underlineMappingSubject.next(d3.event.toElement.attributes.mapping_id.value);
                 }).on("mouseleave", () => {
                   this.jsonSchemaService.setUnderlineMappingIndex(-1);
-
                 })
             }
           })
         }
       }
     })
-
-
   }
 
   ngOnInit() {
     this.jsonSchemaService.parseSchema(this.json);
     this.duration = 750;
-
     // @ts-ignore
-
     this.tree.size([this.height, this.width]);
     this.tree.nodeSize([30, 30]);
     // @ts-ignore
     diagonal = d3.svg.diagonal().projection(function (d) {
       return [d.y, d.x];
     });
-
     //svgElement is an actual element such as a rect or text or group
-
     // @ts-ignore
     this.svg = d3
       .select("app-json-schema")
@@ -171,13 +142,11 @@ export class JsonSchemaComponent implements OnInit {
         "translate(" + this.margin.left + "," + this.margin.top + ")"
       );
     this.svg.call(this.zoom);
-
     this.jsonSchemaService.viewBoardDimensions = {
       width: this.width - 100 + this.margin.right + this.margin.left,
       height: this.height + this.margin.top + this.margin.bottom,
       margin: this.margin
     };
-
     this.svg
       .append("rect")
       .attr("y", -20000)
@@ -191,8 +160,6 @@ export class JsonSchemaComponent implements OnInit {
         d3.behavior
           .drag()
           .on("drag", (d: any) => {
-            // @ts-ignore
-
             // @ts-ignore
             let dx0 =
               // @ts-ignore
@@ -235,24 +202,12 @@ export class JsonSchemaComponent implements OnInit {
       );
     // @ts-ignore
     d3.select("app-json-schema");
-
     this.svg.on("wheel", event => {
       // @ts-ignore
-
-      // @ts-ignore
       if (d3.event.deltaY > 0 && this.currentScale - 0.1 > 0.3) {
-        console.log("this.currentScale", this.currentScale);
         this.currentScale -= 0.1;
         // @ts-ignore
         this.zoom.scale(this.currentScale);
-        // @ts-ignore
-        console.log(
-          "bla_bla",
-          this.zoom.translate(),
-          // @ts-ignore
-          d3.transform(this.svg.attr("transform")).translate[0]
-        );
-
         this.svg.attr(
           "transform",
           "translate(" +
@@ -265,22 +220,12 @@ export class JsonSchemaComponent implements OnInit {
           this.zoom.scale() +
           ")"
         );
-        //todo minus
       }
-
       // @ts-ignore
       else if (d3.event.deltaY < 0) {
         this.currentScale += 0.1;
         // @ts-ignore
         this.zoom.scale(this.currentScale);
-        // @ts-ignore
-        console.log(
-          "bla_bla",
-          this.zoom.translate(),
-          // @ts-ignore
-          d3.transform(this.svg.attr("transform")).translate[0]
-        );
-
         this.svg.attr(
           "transform",
           "translate(" +
@@ -295,20 +240,11 @@ export class JsonSchemaComponent implements OnInit {
         );
       }
     });
-
     // @ts-ignore
     d3.select("#btn-zoom-on").on("click", () => {
       this.currentScale += 0.1;
       // @ts-ignore
       this.zoom.scale(this.currentScale);
-      // @ts-ignore
-      console.log(
-        "bla_bla",
-        this.zoom.translate(),
-        // @ts-ignore
-        d3.transform(this.svg.attr("transform")).translate[0]
-      );
-
       this.svg.attr(
         "transform",
         "translate(" +
@@ -322,79 +258,39 @@ export class JsonSchemaComponent implements OnInit {
         ")"
       );
     });
-
-
-
-
-
-
-    // @ts-ignore
-    d3.select("jsv-tree").on("wheel", () => {
-
-    });
-
     // @ts-ignore
     d3.select("#btn-zoom-out").on("click", () => {
-      this.currentScale -= 0.1;
-      // @ts-ignore
-      this.zoom.scale(this.currentScale);
-      console.log("bla_bla", this.zoom.translate());
+      console.log(this.currentScale, 'f');
+      if (this.currentScale - 0.1 > 0.3) {
+        this.currentScale -= 0.1;
+        // @ts-ignore
+        this.zoom.scale(this.currentScale);
+        this.svg.attr(
+          "transform",
+          "translate(" +
+          // @ts-ignore
+          d3.transform(this.svg.attr("transform")).translate[0] +
+          "," +
+          // @ts-ignore
+          d3.transform(this.svg.attr("transform")).translate[1] +
+          ")scale(" +
+          this.zoom.scale() +
+          ")"
+        );
 
-      this.svg.attr(
-        "transform",
-        "translate(" +
-        // @ts-ignore
-        d3.transform(this.svg.attr("transform")).translate[0] +
-        "," +
-        // @ts-ignore
-        d3.transform(this.svg.attr("transform")).translate[1] +
-        ")scale(" +
-        this.zoom.scale() +
-        ")"
-      );
+      }
+
     });
-
-    console.log("[c]", this.jsonSchemaService.treeData);
-
     this.root = this.jsonSchemaService.treeData[0];
-
     this.root.x0 = this.height / 2;
     this.root.y0 = 0;
-
     this.update(this.root);
-
-
   }
-
-
-
   // define the zoomListener which calls the zoom function on the "zoom" event constrained within the scaleExtents
-
-
   click = d => {
-
-
-
-    // @ts-ignore
-    if (d3.select(d3.event.target.parentNode).selectAll('text')[0].length < 2) {
-
-      // @ts-ignore
-      if (d3.event.ctrlKey && !this.jsonSchemaService.isLineDrawing) {
-
-        // @ts-ignore
-
-        d3.select(d3.event.target).attr('previousFill', d3.event.target.style.fill).style('fill', "green");
-      }
-      else if (this.jsonSchemaService.isLineDrawing && this.jsonSchemaService.startFrom === 2) {
-        // @ts-ignore
-        d3.select(d3.event.target).attr('previousFill', d3.event.target.style.fill).style('fill', "red");
-      }
-    }
-
     // @ts-ignore
     if (d3.event.ctrlKey && d3.event.toElement.nodeName == 'circle') {
       // @ts-ignore
-
       if (this.jsonSchemaService.startFrom === 2 && this.jsonSchemaService.isLineDrawing) {
         // @ts-ignore
         if (d3.select(d3.event.target.parentNode).selectAll('text')[0].length < 2) {
@@ -407,10 +303,7 @@ export class JsonSchemaComponent implements OnInit {
       }
       else if (!this.jsonSchemaService.isLineDrawing) {
         // @ts-ignore
-        console.log('mapping', d3.select(d3.event.target.parentNode).select('text')[0][0].innerHTML);
-        // @ts-ignore
         if (d3.select(d3.event.target.parentNode).selectAll('text')[0].length < 2) {
-
           // @ts-ignore
           let label_name = d3.select(d3.event.target.parentNode).select('text')[0][0].innerHTML;
           // @ts-ignore
@@ -418,16 +311,10 @@ export class JsonSchemaComponent implements OnInit {
           // @ts-ignore
           this.jsonSchemaService.setStartFrom(1);
           this.jsonSchemaService.setIsLineDrawing(true);
-
         }
-
-
       }
-
       return 0;
     }
-
-
     if (
       Math.abs(this.position_before.x - this.position_after.x) > 5 ||
       Math.abs(this.position_before.y - this.position_after.y) > 5
@@ -438,7 +325,6 @@ export class JsonSchemaComponent implements OnInit {
       };
       return 0;
     }
-
     if (d.children) {
       d._children = d.children;
       d.children = null;
@@ -448,27 +334,23 @@ export class JsonSchemaComponent implements OnInit {
     }
     this.update(d);
   };
-
   update = source => {
     // Compute the new tree layout.
-    var i = 0;
+    let i = 0;
     // @ts-ignore
-    var nodes = this.tree.nodes(this.root).reverse(),
+    let nodes = this.tree.nodes(this.root).reverse(),
       // @ts-ignore
       links = this.tree.links(nodes);
-
     // Normalize for fixed-depth.
     nodes.forEach(function (d) {
       d.y = d.depth * 360
     });
-
     // Update the nodes…
-    var node = this.svg.selectAll("g.node").data(nodes, function (d: any) {
+    let node = this.svg.selectAll("g.node").data(nodes, function (d: any) {
       return d.id || (d.id = ++i);
     });
-
     // Enter any new nodes at the parent's previous position.
-    var nodeEnter = node
+    let nodeEnter = node
       .enter()
       .append("g")
       .attr("class", "node activeDrag")
@@ -495,10 +377,6 @@ export class JsonSchemaComponent implements OnInit {
         };
 
       })
-
-
-
-
     nodeEnter
       .append("circle").attr("id", (d) => {
         return d.id;
@@ -512,15 +390,11 @@ export class JsonSchemaComponent implements OnInit {
       })
       .style("padding", "20px")
       .on("mouseenter", () => {
-
         // @ts-ignore
         if (d3.select(d3.event.target.parentNode).selectAll('text')[0].length < 2) {
-
           // @ts-ignore
           if (d3.event.ctrlKey && !this.jsonSchemaService.isLineDrawing) {
-
             // @ts-ignore
-
             d3.select(d3.event.target).attr('previousFill', d3.event.target.style.fill).style('fill', "green");
           }
           else if (this.jsonSchemaService.isLineDrawing && this.jsonSchemaService.startFrom === 2) {
@@ -534,8 +408,6 @@ export class JsonSchemaComponent implements OnInit {
           // @ts-ignore
           d3.select(d3.event.target).style('fill', d3.event.target.attributes.previousFill.value);
         }
-
-
       }).on("mouseleave", () => {
         // @ts-ignore
         if (d3.event.target.attributes.previousFill && (!this.jsonSchemaService.isLineDrawing || this.jsonSchemaService.startFrom === 2)) {
@@ -543,7 +415,6 @@ export class JsonSchemaComponent implements OnInit {
           d3.select(d3.event.target).style('fill', d3.event.target.attributes.previousFill.value);
         }
       })
-
       .call(
         // @ts-ignore
         d3.behavior
@@ -589,7 +460,6 @@ export class JsonSchemaComponent implements OnInit {
             };
           })
       );
-
     nodeEnter
       .append("text").style("font", "28px sans-serif")
       .attr("x", function (d: any) {
@@ -629,17 +499,12 @@ export class JsonSchemaComponent implements OnInit {
           );
           // @ts-ignore
           this.jsonSchemaService.translateJson_first.next({ x: d3.event.sourceEvent.movementY * 1.5, y: d3.event.sourceEvent.movementX * 1.5 })
-
         })
       );
-
-
-
     // ADD MAPPING LABEL to circle
     this.jsonSchemaService.mapTable.forEach((elemArr, indexArr) => {
       let current_text;
       if (elemArr.start_from === 1) {
-
         this.svg.selectAll('circle')[0].forEach((nodeElem, index) => {
           if (nodeElem.attributes && nodeElem.attributes.id && nodeElem.attributes.id.value === elemArr.start_circle_id && nodeElem.parentNode.children.length === 2) {
             // @ts-ignore
@@ -666,11 +531,8 @@ export class JsonSchemaComponent implements OnInit {
       }
 
       else {
-
         nodeEnter.forEach((nodeElem, index) => {
-
           if (nodeElem.attributes && nodeElem.attributes.id && nodeElem.attributes.id.value === elemArr.end_circle_id && nodeElem.parentNode.children.length === 2) {
-
             // @ts-ignore
             d3.select(nodeElem.parentNode).append("text").style("font", "28px sans-serif")
               .attr("x", function (d: any) {
@@ -693,38 +555,28 @@ export class JsonSchemaComponent implements OnInit {
               }).on("mouseleave", (d) => {
                 this.jsonSchemaService.setUnderlineMappingIndex(-1);
               })
-
-
           }
         })
-
       }
-
     });
-
-
-
     // Transition nodes to their new position.
     // @ts-ignore
-    var nodeUpdate = node
+    let nodeUpdate = node
       .transition()
       .duration(this.duration)
       .attr("transform", (d: any) => {
         return "translate(" + d.y + "," + d.x + ")";
       });
-
     nodeUpdate
       .select("circle")
       .attr("r", 10)
       .style("fill", function (d: any) {
         return d._children ? "lightsteelblue" : "#fff";
       });
-
     nodeUpdate.select("text").style("fill-opacity", 1);
-
     // Transition exiting nodes to the parent's new position.
     // @ts-ignore
-    var nodeExit = node
+    let nodeExit = node
       .exit()
       .transition()
       .duration(this.duration)
@@ -732,19 +584,15 @@ export class JsonSchemaComponent implements OnInit {
         return "translate(" + source.y + "," + source.x + ")";
       })
       .remove();
-
     nodeExit.select("circle").attr("r", 1e-6);
-
     nodeExit.select("text").style("fill-opacity", 1e-6);
-
     // Update the links…
-    var link = this.svg
+    let link = this.svg
       .selectAll("path.link")
       // @ts-ignore
       .data(links, function (d: any) {
         return d.target.id;
       });
-
     // Enter any new links at the parent's previous position.
     link
       .enter()
@@ -755,7 +603,7 @@ export class JsonSchemaComponent implements OnInit {
       .attr("class", "link node activeDrag")
       .attr("d", d => {
         console.log("[c] insert");
-        var o = { x: source.x, y: source.y };
+        let o = { x: source.x, y: source.y };
         // let dy0 = source.y + this.deltaDragging.y;
         // let dx0 = source.x + this.deltaDragging.x;
         // @ts-ignore
@@ -764,7 +612,6 @@ export class JsonSchemaComponent implements OnInit {
           target: o
         });
       });
-
     // Transition links to their new position.
     // @ts-ignore
     link
@@ -779,9 +626,7 @@ export class JsonSchemaComponent implements OnInit {
       .transition()
       .duration(this.duration)
       .attr("d", function (d) {
-        console.log("[c] exit");
-        var o = { x: source.x, y: source.y };
-        console.log("[c] source", o);
+        let o = { x: source.x, y: source.y };
         // @ts-ignore
         return diagonal({
           source: o,
@@ -789,13 +634,10 @@ export class JsonSchemaComponent implements OnInit {
         });
       })
       .remove();
-
     // Stash the old positions for transition.
     nodes.forEach(function (d) {
       d.x0 = d.x;
       d.y0 = d.y;
     });
-
-    // this.deltaDragging =  {x: 0, y: 0}
   };
 }

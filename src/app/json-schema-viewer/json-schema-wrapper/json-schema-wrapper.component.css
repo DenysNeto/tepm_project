@@ -1,5 +1,4 @@
 #wrapper {
-
   display: flex;
   flex-direction: row;
   align-items: flex-start;
@@ -10,29 +9,22 @@
   overflow: hidden;
 }
 
-
 .mat-list {
   height: 15rem;
 }
 
 .mat-list-item {
   height: 100%;
-
-
 }
-
-
 
 .list-item {
   width: 5rem;
-
   display: flex;
   flex-direction: column;
 }
 
 .red {
   background-color: red;
-
 }
 
 p {
@@ -44,17 +36,11 @@ p {
   padding-top: 40px;
 }
 
-
 .mat-list-base .mat-list-item,
 .mat-list-base .mat-list-option {
   font-size: 12px;
-
   position: relative;
-
-
 }
-
-
 
 .mat-list-item {
   margin: 1rem;
@@ -71,18 +57,14 @@ p {
 .mat-list-item:hover {
   background-color: lightblue;
   cursor: pointer;
-
 }
-
 .mat-list-item:hover .mat-icon {
   display: block;
-
 }
 
 .mat-icon:hover {
   color: red;
 }
-
 
 .list-item {
   margin: .25rem
@@ -96,7 +78,6 @@ p {
   margin: 0;
   position: absolute;
   background-color: white;
-
 }
 
 .mat-list {
@@ -121,11 +102,5 @@ p {
   max-width: 20rem;
   display: flex;
   justify-content: center;
-
-
-
 }
 
-mat-list-item-content {
-  width: 5rem !important;
-}
